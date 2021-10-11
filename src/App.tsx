@@ -1,15 +1,13 @@
-import styled from 'styled-components';
-
-const Title = styled.h1`
-    color: green;
-    font-size: 64px;
-    font-family: Arial, sans-serif;
-`;
+import { Dashboard } from './components/Dashboard';
+import { Header } from './components/Header';
+import { GlobalStyle } from './styles/global';
 
 export function App() {
     return (
-        <div className="App">
-            <Title>Hellopa</Title>
-        </div>
+        <>
+            <Header />
+            <Dashboard />
+            <GlobalStyle />
+        </>
     );
 }
