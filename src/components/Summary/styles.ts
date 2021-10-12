@@ -20,7 +20,7 @@ export const Container = styled.section`
 
         strong {
             display: block;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             font-size: 2rem;
             line-height: 3rem;
         }
