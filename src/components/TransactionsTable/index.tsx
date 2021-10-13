@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { api } from '../../services/api';
 import { Container } from './styles';
 
 export interface TransactionProps {
@@ -14,11 +15,9 @@ export function TransactionsTable() {
     const [transactions, setTransactions] = useState<TransactionProps[]>([]);
 
     useEffect(() => {
-        fetch('https://localhost:3000/api/transactions')
-            .then((response) => response.json())
-            .then((data) => {
-                setTransactions(data);
-            });
+        api.get('/transactions').then((response) => {
+            setTransactions(response.data);
+        });
     }, []);
 
     return (
@@ -38,8 +37,8 @@ export function TransactionsTable() {
                             <tr key={transaction.id}>
                                 <td>{transaction.title}</td>
                                 <td className={transaction.type}>
-                                    {transaction.type === 'outcome' && '-'} R${' '}
-                                    {transaction.amount}
+                                    {transaction.type === 'outcome' ? '-' : '+'}{' '}
+                                    R$ {transaction.amount}
                                 </td>
                                 <td>{transaction.category}</td>
                                 <td>{transaction.date}</td>

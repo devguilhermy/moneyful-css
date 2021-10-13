@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 
 import { TransactionProps } from '../TransactionsTable';
 import { api } from '../../services/api';
-import { AxiosResponse } from 'axios';
 
 export function Summary() {
     const [summary, setSummary] = useState({
