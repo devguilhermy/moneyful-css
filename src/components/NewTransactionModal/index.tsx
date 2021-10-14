@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Modal from 'react-modal';
 import { api } from '../../services/api';
-import { Container } from './styles';
+import { Container, RadioBox, TransactionTypesContainer } from './styles';
+
+import closeImg from '../../assets/close.svg';
+import incomeImg from '../../assets/income.svg';
+import outcomeImg from '../../assets/outcome.svg';
 
 Modal.setAppElement('#root');
 
@@ -14,13 +18,15 @@ export function NewTransactionModal({
     isOpen,
     onRequestClose,
 }: NewTransactionModalProps) {
-    const [title, setTitle] = useState('');
-    const [amount, setAmount] = useState(0);
-    const [type, setType] = useState('income');
-    const [category, setCategory] = useState('');
-    const [date, setDate] = useState('2021-10-23');
+    const [title, setTitle] = useState<string>();
+    const [amount, setAmount] = useState<number>();
+    const [type, setType] = useState<'income' | 'outcome'>('income');
+    const [category, setCategory] = useState<string>();
+    const [date, setDate] = useState<string>();
 
-    function handleSubmit() {
+    function handleSubmit(event: FormEvent) {
+        event.preventDefault();
+
         const transaction = {
             title,
             amount,
@@ -28,9 +34,20 @@ export function NewTransactionModal({
             category,
             date,
         };
+
         console.log(transaction);
 
-        api.post('/transactions', transaction).then(() => alert('ok'));
+        api.post('/transactions', transaction).then((response) => {
+            console.log(response);
+        });
+
+        setTitle('');
+        setAmount(0);
+        setType('income');
+        setCategory('');
+        setDate('');
+
+        onRequestClose();
     }
     return (
         <Modal
@@ -39,7 +56,14 @@ export function NewTransactionModal({
             overlayClassName="react-modal-overlay"
             className="react-modal-content"
         >
-            <Container>
+            <button
+                type="button"
+                className="react-close-modal"
+                onClick={onRequestClose}
+            >
+                <img src={closeImg} alt="Fechar" />
+            </button>
+            <Container onSubmit={handleSubmit}>
                 <h2>Cadastrar transação</h2>
                 <input
                     type="text"
@@ -47,16 +71,11 @@ export function NewTransactionModal({
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
                 />
-                {/* <div className="error-messages">
-<p className="message">{errors.title?.message}</p>
-</div> */}
                 <input
-                    type="text"
+                    type="number"
                     placeholder="Valor"
                     value={amount}
-                    onChange={(event) =>
-                        setAmount(parseInt(event.target.value))
-                    }
+                    onChange={(event) => setAmount(Number(event.target.value))}
                 />
                 <input
                     type="text"
@@ -64,14 +83,32 @@ export function NewTransactionModal({
                     value={category}
                     onChange={(event) => setCategory(event.target.value)}
                 />
+
+                <TransactionTypesContainer>
+                    <RadioBox
+                        type="button"
+                        onClick={() => setType('income')}
+                        isActive={type === 'income'}
+                        activeColor="green"
+                    >
+                        <img src={incomeImg} alt="Saída" /> <span>Entrada</span>
+                    </RadioBox>
+                    <RadioBox
+                        type="button"
+                        onClick={() => setType('outcome')}
+                        isActive={type === 'outcome'}
+                        activeColor="red"
+                    >
+                        <img src={outcomeImg} alt="Saída" /> <span>Saída</span>
+                    </RadioBox>
+                </TransactionTypesContainer>
+
                 <input
                     type="date"
                     value={date}
                     onChange={(event) => setDate(event.target.value)}
                 />
-                <button type="button" onClick={handleSubmit}>
-                    Salvar
-                </button>
+                <button type="submit">Salvar</button>
             </Container>
         </Modal>
     );
