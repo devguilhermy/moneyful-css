@@ -1,8 +1,8 @@
-import React, { FormEvent, useState } from 'react';
-import Modal from 'react-modal';
-import { api } from '../../services/api';
 import { Container, RadioBox, TransactionTypesContainer } from './styles';
+import React, { FormEvent, useContext, useState } from 'react';
 
+import Modal from 'react-modal';
+import { TransactionsContext } from '../../TransactionsContext';
 import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
@@ -18,27 +18,23 @@ export function NewTransactionModal({
     isOpen,
     onRequestClose,
 }: NewTransactionModalProps) {
-    const [title, setTitle] = useState<string>();
-    const [amount, setAmount] = useState<number>();
+    const [title, setTitle] = useState<string>('');
+    const [amount, setAmount] = useState<number>(0);
     const [type, setType] = useState<'income' | 'outcome'>('income');
-    const [category, setCategory] = useState<string>();
-    const [date, setDate] = useState<string>();
+    const [category, setCategory] = useState<string>('');
+    const [date, setDate] = useState<string>('');
+
+    const { createTransaction } = useContext(TransactionsContext);
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
 
-        const transaction = {
+        createTransaction({
             title,
             amount,
             type,
             category,
             date,
-        };
-
-        console.log(transaction);
-
-        api.post('/transactions', transaction).then((response) => {
-            console.log(response);
         });
 
         setTitle('');

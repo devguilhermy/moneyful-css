@@ -85,6 +85,6 @@ export const RadioBox = styled.button<RadioBoxProps>`
     }
 
     &:hover {
-        border-color: var(--input-border-lighter);
+        border: 2px solid var(--input-border-lighter);
     }
 `;

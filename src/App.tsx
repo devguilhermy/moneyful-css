@@ -1,11 +1,11 @@
-import { Dashboard } from './components/Dashboard';
-import { Header } from './components/Header';
-import { GlobalStyle } from './styles/global';
+import { Model, createServer } from 'miragejs';
 
-import { useState } from 'react';
-import { createServer, Model } from 'miragejs';
+import { Dashboard } from './components/Dashboard';
+import { GlobalStyle } from './styles/global';
+import { Header } from './components/Header';
 import { NewTransactionModal } from './components/NewTransactionModal';
 import { TransactionsProvider } from './TransactionsContext';
+import { useState } from 'react';
 
 createServer({
     models: {
@@ -44,8 +44,6 @@ createServer({
 
         this.post('/transactions', (schema, request) => {
             let data = JSON.parse(request.requestBody);
-
-            data.id = Math.floor(Math.random() * 100);
 
             return schema.create('transaction', data);
         });
