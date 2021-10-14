@@ -3,12 +3,12 @@ import { Container } from './styles';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
 import moneyImg from '../../assets/money.svg';
-import { useEffect, useState } from 'react';
-
-import { Transaction } from '../TransactionsTable';
-import { api } from '../../services/api';
+import { useContext, useEffect, useState } from 'react';
+import { TransactionsContext } from '../../TransactionsContext';
 
 export function Summary() {
+    const transactions = useContext(TransactionsContext);
+
     const [summary, setSummary] = useState({
         incomeTotal: 0,
         outcomeTotal: 0,
@@ -16,28 +16,22 @@ export function Summary() {
     });
 
     useEffect(() => {
-        api.get<{ transactions: Transaction[] }>('/transactions').then(
-            (response) => {
-                let incomeTotal = 0;
-                let outcomeTotal = 0;
-                let total = 0;
+        let incomeTotal = 0;
+        let outcomeTotal = 0;
+        let total = 0;
 
-                response.data.transactions.forEach(
-                    (transaction: Transaction) => {
-                        if (transaction.type === 'income') {
-                            incomeTotal += transaction.amount;
-                        } else if (transaction.type === 'outcome') {
-                            outcomeTotal += transaction.amount;
-                        }
-                    }
-                );
-
-                total = incomeTotal - outcomeTotal;
-
-                setSummary({ incomeTotal, outcomeTotal, total });
+        transactions.forEach((transaction) => {
+            if (transaction.type === 'income') {
+                incomeTotal += transaction.amount;
+            } else if (transaction.type === 'outcome') {
+                outcomeTotal += transaction.amount;
             }
-        );
-    }, []);
+        });
+
+        total = incomeTotal - outcomeTotal;
+
+        setSummary({ incomeTotal, outcomeTotal, total });
+    }, [transactions]);
 
     return (
         <Container>
