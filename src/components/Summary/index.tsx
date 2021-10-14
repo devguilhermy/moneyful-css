@@ -5,7 +5,7 @@ import outcomeImg from '../../assets/outcome.svg';
 import moneyImg from '../../assets/money.svg';
 import { useEffect, useState } from 'react';
 
-import { TransactionProps } from '../TransactionsTable';
+import { Transaction } from '../TransactionsTable';
 import { api } from '../../services/api';
 
 export function Summary() {
@@ -16,23 +16,27 @@ export function Summary() {
     });
 
     useEffect(() => {
-        api.get<TransactionProps[]>('/transactions').then((response) => {
-            let incomeTotal = 0;
-            let outcomeTotal = 0;
-            let total = 0;
+        api.get<{ transactions: Transaction[] }>('/transactions').then(
+            (response) => {
+                let incomeTotal = 0;
+                let outcomeTotal = 0;
+                let total = 0;
 
-            response.data.forEach((transaction: TransactionProps) => {
-                if (transaction.type === 'income') {
-                    incomeTotal += transaction.amount;
-                } else if (transaction.type === 'outcome') {
-                    outcomeTotal += transaction.amount;
-                }
-            });
+                response.data.transactions.forEach(
+                    (transaction: Transaction) => {
+                        if (transaction.type === 'income') {
+                            incomeTotal += transaction.amount;
+                        } else if (transaction.type === 'outcome') {
+                            outcomeTotal += transaction.amount;
+                        }
+                    }
+                );
 
-            total = incomeTotal - outcomeTotal;
+                total = incomeTotal - outcomeTotal;
 
-            setSummary({ incomeTotal, outcomeTotal, total });
-        });
+                setSummary({ incomeTotal, outcomeTotal, total });
+            }
+        );
     }, []);
 
     return (
@@ -42,21 +46,36 @@ export function Summary() {
                     <p>Entradas</p>
                     <img src={incomeImg} alt="Ícone de entradas" />
                 </header>
-                <strong>R$ {summary.incomeTotal}</strong>
+                <strong>
+                    {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                    }).format(summary.incomeTotal)}
+                </strong>
             </div>
             <div>
                 <header>
                     <p>Saídas</p>
                     <img src={outcomeImg} alt="Ícone de saídas" />
                 </header>
-                <strong>- R$ {summary.outcomeTotal}</strong>
+                <strong>
+                    {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                    }).format(summary.outcomeTotal)}
+                </strong>
             </div>
             <div className="highlight-background">
                 <header>
                     <p>Total</p>
                     <img src={moneyImg} alt="Ícone de dinheiro" />
                 </header>
-                <strong>R$ {summary.total}</strong>
+                <strong>
+                    {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                    }).format(summary.total)}
+                </strong>
             </div>
         </Container>
     );

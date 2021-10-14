@@ -3,48 +3,42 @@ import { Header } from './components/Header';
 import { GlobalStyle } from './styles/global';
 
 import { useState } from 'react';
-import { createServer } from 'miragejs';
+import { createServer, Model } from 'miragejs';
 import { NewTransactionModal } from './components/NewTransactionModal';
 
 createServer({
-    routes() {
-        this.namespace = 'api';
+    models: {
+        transaction: Model,
+    },
 
-        this.get('/transactions', () => {
-            return [
+    seeds(server) {
+        server.db.loadData({
+            transactions: [
                 {
                     id: 1,
-                    title: 'Freelance WiseUp',
-                    amount: 10000,
-                    type: 'income',
-                    category: 'Salário',
-                    date: new Date(),
+                    title: 'Steak BBQ',
+                    amount: 450.8,
+                    type: 'outcome',
+                    category: 'Restaurante',
+                    date: '2021-10-12',
                 },
                 {
                     id: 2,
-                    title: 'Jantar BBQ',
-                    amount: 240,
-                    type: 'outcome',
-                    category: 'Restaurante',
-                    date: new Date(),
+                    title: 'Freelance Dev',
+                    amount: 10000,
+                    type: 'income',
+                    category: 'Salário',
+                    date: '2021-10-08',
                 },
-                {
-                    id: 3,
-                    title: 'Barber Hibraim',
-                    amount: 50,
-                    type: 'outcome',
-                    category: 'Pessoal',
-                    date: new Date(),
-                },
-                {
-                    id: 4,
-                    title: 'Aluguel Point',
-                    amount: 2200,
-                    type: 'outcome',
-                    category: 'Moradia',
-                    date: new Date(),
-                },
-            ];
+            ],
+        });
+    },
+
+    routes() {
+        this.namespace = 'api';
+
+        this.get('/transactions', (schema, request) => {
+            return schema.all('transaction');
         });
 
         this.post('/transactions', (schema, request) => {
@@ -52,7 +46,7 @@ createServer({
 
             data.id = Math.floor(Math.random() * 100);
 
-            return { transaction: data };
+            return schema.create('transaction', data);
         });
     },
 });

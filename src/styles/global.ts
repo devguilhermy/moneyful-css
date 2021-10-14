@@ -1,5 +1,11 @@
 import { createGlobalStyle } from 'styled-components';
 
+export const colors = {
+    red: '#e52e4d',
+    blue: '#5429cc',
+    green: '#33cc95',
+};
+
 export const GlobalStyle = createGlobalStyle`
 	:root {
 		--background: #f0f2f5;
@@ -11,7 +17,8 @@ export const GlobalStyle = createGlobalStyle`
 		--text-body: #969cb3;
 		--shape: #ffffff;
 		--input-background: #e7e9ee;
-		--input-border: #d7d7d7
+		--input-border: #d7d7d7;
+		--input-border-lighter: #a7a7a7;
 	}
 
 	* {
@@ -36,7 +43,7 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	body, input, textarea, button {
-		font-family: "Montserrat", "Helvetica Neue", sans-serif;
+		font-family: "Poppins", "Helvetica Neue", sans-serif;
 		font-weight: 400;
 	}
 
@@ -47,6 +54,9 @@ export const GlobalStyle = createGlobalStyle`
 	button { 
 		cursor: pointer;
 	}
+
+	input::placeholder {
+		color: var(--text-body)}
 
 	[disabled] {
 		opacity: 0.6;
@@ -74,5 +84,19 @@ export const GlobalStyle = createGlobalStyle`
 		padding: 3rem;
 		background: var(--shape);
 		border-radius: 0.5rem;
+	}
+
+	.react-close-modal {
+		position: absolute;
+		top: 1.5rem;
+		right: 1.5rem;
+		border: 0;
+		background: transparent;
+
+		transition: filter 0.2s;
+
+		&:hover, &:focus {
+			filter: brightness(0.7)
+		}
 	}
 `;

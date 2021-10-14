@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import { Container } from './styles';
 
-export interface TransactionProps {
+export interface Transaction {
     id: number;
     title: string;
     type: 'income' | 'outcome';
@@ -12,12 +12,12 @@ export interface TransactionProps {
 }
 
 export function TransactionsTable() {
-    const [transactions, setTransactions] = useState<TransactionProps[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     useEffect(() => {
-        api.get('/transactions').then((response) => {
-            setTransactions(response.data);
-        });
+        api.get<{ transactions: Transaction[] }>('/transactions').then(
+            (response) => setTransactions(response.data.transactions)
+        );
     }, []);
 
     return (
@@ -37,11 +37,17 @@ export function TransactionsTable() {
                             <tr key={transaction.id}>
                                 <td>{transaction.title}</td>
                                 <td className={transaction.type}>
-                                    {transaction.type === 'outcome' ? '-' : '+'}{' '}
-                                    R$ {transaction.amount}
+                                    {new Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                    }).format(transaction.amount)}
                                 </td>
                                 <td>{transaction.category}</td>
-                                <td>{transaction.date}</td>
+                                <td>
+                                    {new Intl.DateTimeFormat('pt-BR').format(
+                                        new Date(transaction.date)
+                                    )}
+                                </td>
                             </tr>
                         );
                     })}
