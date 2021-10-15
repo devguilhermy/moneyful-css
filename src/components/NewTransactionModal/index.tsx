@@ -1,11 +1,11 @@
 import { Container, RadioBox, TransactionTypesContainer } from './styles';
-import React, { FormEvent, useContext, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import Modal from 'react-modal';
-import { TransactionsContext } from '../../TransactionsContext';
 import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
+import { useTransactions } from '../../hooks/useTransactions';
 
 Modal.setAppElement('#root');
 
@@ -24,7 +24,7 @@ export function NewTransactionModal({
     const [category, setCategory] = useState<string>('');
     const [date, setDate] = useState<string>('');
 
-    const { createTransaction } = useContext(TransactionsContext);
+    const { createTransaction } = useTransactions();
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault();

@@ -4,7 +4,7 @@ import { Dashboard } from './components/Dashboard';
 import { GlobalStyle } from './styles/global';
 import { Header } from './components/Header';
 import { NewTransactionModal } from './components/NewTransactionModal';
-import { TransactionsProvider } from './TransactionsContext';
+import { TransactionsProvider } from './hooks/useTransactions';
 import { useState } from 'react';
 
 createServer({
@@ -17,19 +17,27 @@ createServer({
             transactions: [
                 {
                     id: 1,
-                    title: 'Steak BBQ',
-                    amount: 450.8,
-                    type: 'outcome',
-                    category: 'Restaurante',
-                    date: '2021-10-12',
-                },
-                {
-                    id: 2,
                     title: 'Freelance Dev',
                     amount: 10000,
                     type: 'income',
                     category: 'Salário',
-                    date: '2021-10-08',
+                    date: '2021-10-12',
+                },
+                {
+                    id: 2,
+                    title: 'Telesena',
+                    amount: 800,
+                    type: 'outcome',
+                    category: 'Apostas',
+                    date: '2021-10-13',
+                },
+                {
+                    id: 2,
+                    title: 'Jogo do Bicho',
+                    amount: 30000,
+                    type: 'income',
+                    category: 'Apostas',
+                    date: '2021-10-15',
                 },
             ],
         });

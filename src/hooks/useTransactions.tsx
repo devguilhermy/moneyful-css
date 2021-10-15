@@ -1,10 +1,12 @@
-import { ReactNode, createContext, useEffect, useState } from 'react';
+import {
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 
-import { api } from './services/api';
-
-// import { AxiosResponse } from 'axios';
-
-// import { api } from './services/api';
+import { api } from '../services/api';
 
 interface TransactionsProviderProps {
     children: ReactNode;
@@ -15,7 +17,7 @@ interface TransactionContextProps {
     createTransaction: (transaction: TransactionInput) => Promise<void>;
 }
 
-export const TransactionsContext = createContext<TransactionContextProps>(
+const TransactionsContext = createContext<TransactionContextProps>(
     {} as TransactionContextProps
 );
 
@@ -62,4 +64,10 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
             {children}
         </TransactionsContext.Provider>
     );
+}
+
+export function useTransactions() {
+    const context = useContext(TransactionsContext);
+
+    return context;
 }
