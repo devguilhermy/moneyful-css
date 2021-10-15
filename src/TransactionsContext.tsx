@@ -40,15 +40,19 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     }, []);
 
     function createTransaction(transactionInput: TransactionInput) {
-        api.post<{ transaction: Transaction }>(
-            '/transactions',
-            transactionInput
-        ).then((response) => {
-            const { transaction } = response.data;
+        return api
+            .post<{ transaction: Transaction }>(
+                '/transactions',
+                transactionInput
+            )
+            .then((response) => {
+                const { transaction } = response.data;
 
-            transaction.id = Number(transaction.id);
-            setTransactions((transactions) => [...transactions, transaction]);
-        });
+                setTransactions((transactions) => [
+                    ...transactions,
+                    transaction,
+                ]);
+            });
     }
 
     return (
