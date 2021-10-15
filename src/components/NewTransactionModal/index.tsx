@@ -26,10 +26,10 @@ export function NewTransactionModal({
 
     const { createTransaction } = useContext(TransactionsContext);
 
-    function handleSubmit(event: FormEvent) {
+    async function handleSubmit(event: FormEvent) {
         event.preventDefault();
 
-        createTransaction({
+        await createTransaction({
             title,
             amount,
             type,

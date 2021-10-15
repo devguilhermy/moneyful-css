@@ -1,5 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-export const api = axios.create({
+export const api: AxiosInstance = axios.create({
     baseURL: 'https://localhost:3000/api',
 });
