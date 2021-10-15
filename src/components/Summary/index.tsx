@@ -1,37 +1,27 @@
-import { useContext, useEffect, useState } from 'react';
-
 import { Container } from './styles';
 import { TransactionsContext } from '../../TransactionsContext';
 import incomeImg from '../../assets/income.svg';
 import moneyImg from '../../assets/money.svg';
 import outcomeImg from '../../assets/outcome.svg';
+import { useContext } from 'react';
 
 export function Summary() {
     const { transactions } = useContext(TransactionsContext);
 
-    const [summary, setSummary] = useState({
-        incomeTotal: 0,
-        outcomeTotal: 0,
-        total: 0,
-    });
-
-    useEffect(() => {
-        let incomeTotal = 0;
-        let outcomeTotal = 0;
-        let total = 0;
-
-        transactions.forEach((transaction) => {
+    const summary = transactions.reduce(
+        (acc, transaction) => {
             if (transaction.type === 'income') {
-                incomeTotal += transaction.amount;
-            } else if (transaction.type === 'outcome') {
-                outcomeTotal += transaction.amount;
+                acc.incomeTotal += transaction.amount;
+                acc.total += transaction.amount;
+            } else {
+                acc.outcomeTotal += transaction.amount;
+                acc.total -= transaction.amount;
             }
-        });
 
-        total = incomeTotal - outcomeTotal;
-
-        setSummary({ incomeTotal, outcomeTotal, total });
-    }, [transactions]);
+            return acc;
+        },
+        { incomeTotal: 0, outcomeTotal: 0, total: 0 }
+    );
 
     return (
         <Container>
@@ -53,6 +43,7 @@ export function Summary() {
                     <img src={outcomeImg} alt="Ícone de saídas" />
                 </header>
                 <strong>
+                    -{' '}
                     {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
