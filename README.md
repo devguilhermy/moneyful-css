@@ -1,4 +1,4 @@
-# Moneyful
+# Moneyful (CSS puro)
 Gerencie receitas e despesas facilmente com o Moneyful
 
 * Crie categorias de movimentações
